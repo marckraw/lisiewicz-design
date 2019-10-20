@@ -5,3 +5,6 @@ services:
         image: registry.gitlab.com/marckraw/lisiewicz-design/lisiewiczdesign_frontend:0.0.1
         ports:
             - "80:80"
+
+    db:
+        image: mongo:latest
