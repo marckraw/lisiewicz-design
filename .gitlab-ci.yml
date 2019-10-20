@@ -4,7 +4,7 @@ variables:
   REGISTRY: registry.gitlab.com/marckraw/lisiewicz-design
   REPO: https://gitlab.com/marckraw/lisiewicz-design
   VERSION: 0.0.1
-  FRONTEND_CONTAINER: extraordinaryday_frontend
+  FRONTEND_CONTAINER: lisiewicz-design
 
 stages:
   - build_frontend_stage
