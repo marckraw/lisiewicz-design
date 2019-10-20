@@ -1,5 +1,5 @@
 {
-    "name": "lisiewicz_ecommerce",
+    "name": "lisiewicz_design",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
@@ -12,7 +12,7 @@
         "react-portal": "^4.2.0",
         "react-router": "^4.3.1",
         "react-router-dom": "^4.3.1",
-        "react-scripts": "2.1.1",
+        "react-scripts": "^3.2.0",
         "react-scroll": "^1.7.10",
         "styled-components": "^4.0.3"
     },
