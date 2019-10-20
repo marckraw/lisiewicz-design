@@ -2,9 +2,9 @@ variables:
   WORK_DIR: ${CI_PROJECT_NAME}
   BRANCH: ${CI_COMMIT_REF_NAME}
   REGISTRY: registry.gitlab.com/marckraw/lisiewicz-design
-  REPO: https://gitlab.com/marckraw/lisiewicz-design
   VERSION: 0.0.1
-  FRONTEND_CONTAINER: lisiewicz-design
+  FRONTEND_CONTAINER: lisiewiczdesign_frontend
+  REPO: https://gitlab.com/marckraw/lisiewiczdesign
 
 stages:
   - build_frontend_stage
