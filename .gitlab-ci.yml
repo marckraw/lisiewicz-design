@@ -1,0 +1,49 @@
+variables:
+  WORK_DIR: ${CI_PROJECT_NAME}
+  BRANCH: ${CI_COMMIT_REF_NAME}
+  REGISTRY: registry.gitlab.com/codepride/lisiewicz_ecommerce
+  REPO: https://gitlab.com/codepride/lisiewicz_ecommerce
+
+stages:
+  - buildFrontendImage
+  - buildFrontedApp
+  - buildFrontendImageWithNginx
+  - deployFrontendImageWithNginx
+
+buildImage_frontend_project:
+  stage: buildFrontendImage
+  script:
+    - docker login -u codepride -p $PASS registry.gitlab.com
+    - docker build frontend -t $REGISTRY -f ./frontend/prod.Dockerfile
+    - docker push $REGISTRY
+  tags:
+    - lisiewicz
+
+build_frontend_project:
+  stage: buildFrontedApp
+  script:
+    - docker login -u codepride -p $PASS registry.gitlab.com
+    - docker pull $REGISTRY
+    - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
+    - docker run --name=$BRANCH -p 80:8080 -itd $REGISTRY yarn build
+  tags:
+    - lisiewicz
+
+build_frontend_project_with_nging:
+  stage: buildFrontendImageWithNginx
+  script:
+    - docker login -u codepride -p $PASS registry.gitlab.com
+    - docker build frontend -t $REGISTRY -f ./frontend/deploy.Dockerfile
+    - docker push $REGISTRY
+  tags:
+    - lisiewicz
+
+deploy_frontend_project_with_nging:
+  stage: deployFrontendImageWithNginx
+  script:
+    - docker login -u codepride -p $PASS registry.gitlab.com
+    - docker pull $REGISTRY
+    - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
+    - docker run --name=$BRANCH -p 80:80 -itd $REGISTRY
+  tags:
+    - lisiewicz

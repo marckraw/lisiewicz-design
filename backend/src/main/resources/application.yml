@@ -1,0 +1,23 @@
+spring:
+  data:
+    mongodb:
+      port: 27017
+      database: lisiewicz_ecommerce
+      host: localhost
+
+contact:
+  email: biuro@lisiewiczdesign.com
+  address:
+    street:
+      name: Kamionki
+      number: 4
+    postcode: 58-250
+    voivodeship: Dolnośląskie
+  nip: 8822119369
+  companyname: Lisiewicz design Hubert Lisiewicz
+  phonenumber: 782978898
+
+social:
+  facebook: https://web.facebook.com/Lisiewiczdesign/
+  instagram: https://www.instagram.com/lisiewicz_design/
+  twitter:
