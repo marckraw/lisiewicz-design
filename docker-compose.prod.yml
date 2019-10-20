@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  frontend:
-    image: registry.gitlab.com/marckraw/lisiewicz-design/lisiewiczdesign_frontend:0.0.1
-    ports:
-      - "80:80"
+    frontend:
+        image: registry.gitlab.com/marckraw/lisiewicz-design/lisiewiczdesign_frontend:0.0.1
+        ports:
+            - 80:80
