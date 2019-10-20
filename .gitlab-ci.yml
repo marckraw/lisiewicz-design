@@ -1,49 +1,50 @@
 variables:
   WORK_DIR: ${CI_PROJECT_NAME}
   BRANCH: ${CI_COMMIT_REF_NAME}
-  REGISTRY: registry.gitlab.com/codepride/lisiewicz_ecommerce
-  REPO: https://gitlab.com/codepride/lisiewicz_ecommerce
+  REGISTRY: registry.gitlab.com/marckraw/lisiewicz-design
+  REPO: https://gitlab.com/marckraw/lisiewicz-design
+  VERSION: 0.0.1
+  FRONTEND_CONTAINER: extraordinaryday_frontend
 
 stages:
-  - buildFrontendImage
-  - buildFrontedApp
-  - buildFrontendImageWithNginx
-  - deployFrontendImageWithNginx
+  - build_frontend_stage
+  - deploy_frontend_stage
 
-buildImage_frontend_project:
-  stage: buildFrontendImage
+build_frontend:
+  environment:
+    name: production
+    url: https://lisiewiczdesign.com
+  allow_failure: true
+  stage: build_frontend_stage
   script:
-    - docker login -u codepride -p $PASS registry.gitlab.com
-    - docker build frontend -t $REGISTRY -f ./frontend/prod.Dockerfile
-    - docker push $REGISTRY
+    - echo "Project environment ${CI_ENVIRONMENT_NAME}"
+    - echo "Project url ${CI_ENVIRONMENT_URL}"
+    - echo "Pipeline project url ${CI_PIPELINE_URL}"
+    # - echo "Copying certs and privates to docker build context"
+    # - cp /home/gitlab-runner/certs/lisiewiczdesign.crt ./frontend/
+    # - cp /home/gitlab-runner/private/lisiewiczdesign.key ./frontend/
+    - echo "Building frontend..."
+    - docker login -u marckraw -p $PASS registry.gitlab.com
+    - docker build frontend -t ${REGISTRY}/${FRONTEND_CONTAINER}:${VERSION} -f ./frontend/prod.Dockerfile
+    - docker push ${REGISTRY}/${FRONTEND_CONTAINER}:${VERSION}
+    - echo "Build successfully! :)"
   tags:
-    - lisiewicz
+    - lisiewiczdesign
 
-build_frontend_project:
-  stage: buildFrontedApp
+deploy_frontend:
+  environment:
+    name: production
+    url: https://lisiewiczdesign.com
+  allow_failure: true
+  stage: deploy_frontend_stage
   script:
-    - docker login -u codepride -p $PASS registry.gitlab.com
-    - docker pull $REGISTRY
-    - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
-    - docker run --name=$BRANCH -p 80:8080 -itd $REGISTRY yarn build
+    - echo "Project environment ${CI_ENVIRONMENT_NAME}"
+    - echo "Project url ${CI_ENVIRONMENT_URL}"
+    - echo "Pipeline project url ${CI_PIPELINE_URL}"
+    - echo "Deploying frontend..."
+    - docker login -u marckraw -p $PASS registry.gitlab.com
+    - docker pull ${REGISTRY}/${FRONTEND_CONTAINER}:${VERSION}
+    - docker-compose -f docker-compose.prod.yml up --no-deps -d frontend
+    - echo "Deploy successfull! :)"
   tags:
-    - lisiewicz
-
-build_frontend_project_with_nging:
-  stage: buildFrontendImageWithNginx
-  script:
-    - docker login -u codepride -p $PASS registry.gitlab.com
-    - docker build frontend -t $REGISTRY -f ./frontend/deploy.Dockerfile
-    - docker push $REGISTRY
-  tags:
-    - lisiewicz
-
-deploy_frontend_project_with_nging:
-  stage: deployFrontendImageWithNginx
-  script:
-    - docker login -u codepride -p $PASS registry.gitlab.com
-    - docker pull $REGISTRY
-    - docker stop $(docker ps -a -q) || true && docker rm $(docker ps -a -q) || true
-    - docker run --name=$BRANCH -p 80:80 -itd $REGISTRY
-  tags:
-    - lisiewicz
+    - lisiewiczdesign

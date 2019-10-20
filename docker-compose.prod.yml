@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+    frontend:
+        image: registry.gitlab.com/marckraw/lisiewicz-design/lisiewicz-design_frontend:0.0.1
+        ports:
+            - "80:80"
+            # - "443:443"
+        networks:
+            - frontend
+            - backend
+    # backend:
+    #     container_name: backend
+    #     image: registry.gitlab.com/marckraw/lisiewicz-design/lisiewicz-design_backend:0.0.1
+    #     ports:
+    #         - 8000:3000
+    #     networks:
+    #         - frontend
+    #         - backend
+    # db:
+    #     image: mongo:latest
+    #     container_name: database
+    #     environment:
+    #         - MONGO_DATA_DIR=/data/db
+    #         - MONGO_LOG_DIR=/dev/null
+    #     volumes:
+    #         - data-volume:/data/db
+    #     ports:
+    #         - 27017:27017
+    #     command: mongod --logpath=/dev/null # --quiet
+    #     networks:
+    #         - backend
+# volumes:
+#     data-volume:
+
+# networks:
+#     frontend:
+#         driver: bridge
+#         name: frontend_net
+#     backend:
+#         driver: bridge
+#         name: backend_net
