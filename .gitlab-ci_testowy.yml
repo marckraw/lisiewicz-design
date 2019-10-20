@@ -1,0 +1,28 @@
+variables:
+  WORK_DIR: ${CI_PROJECT_NAME}
+  BRANCH: ${CI_COMMIT_REF_NAME}
+  REGISTRY: registry.gitlab.com/marckraw/lisiewicz-design
+  VERSION: 0.0.1
+  FRONTEND_CONTAINER: lisiewiczdesign_frontend
+  REPO: https://gitlab.com/marckraw/lisiewiczdesign
+
+stages:
+  - test
+
+test_stage:
+  environment:
+    name: production
+    url: https://lisiewiczdesign.com
+  allow_failure: true
+  stage: test
+  script:
+    - echo "Project environment ${CI_ENVIRONMENT_NAME}"
+    - echo "Project url ${CI_ENVIRONMENT_URL}"
+    - echo "Pipeline project url ${CI_PIPELINE_URL}"
+    - echo "Building frontend..."
+    - docker login -u marckraw -p $PASS registry.gitlab.com
+    - docker build frontend -t ${REGISTRY}/${FRONTEND_CONTAINER}:${VERSION} -f ./frontend/prod.Dockerfile
+    - docker push ${REGISTRY}/${FRONTEND_CONTAINER}:${VERSION}
+    - echo "Build successfully! :)"
+  tags:
+    - lisiewiczdesign
